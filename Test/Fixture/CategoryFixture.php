@@ -29,11 +29,11 @@ class CategoryFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => 1,
-			'name' => 'Lorem ipsum dolor sit amet',
-			'description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-			'created' => '2012-08-30 11:12:31',
-			'modified' => '2012-08-30 11:12:31'
+			'id' => '1',
+			'name' => 'Games',
+			'description' => 'Games are fun',
+			'created' => '2012-08-30 13:59:07',
+			'modified' => '2012-08-30 13:59:07'
 		),
 	);
 

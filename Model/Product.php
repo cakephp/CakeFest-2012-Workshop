@@ -107,6 +107,7 @@ class Product extends AppModel {
 	protected function _findInStock($state, $query, $results = array()) {
 		if ($state === 'before') {
 			$query['conditions']['Product.quantity_left >'] = 0;
+			$query['order']['Product.name'] = 'desc';
 			$query['contain']['Category'] = array('fields' => array('id', 'name'));
 			return $query;
 		}

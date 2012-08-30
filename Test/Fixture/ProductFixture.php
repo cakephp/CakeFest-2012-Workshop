@@ -16,6 +16,7 @@ class ProductFixture extends CakeTestFixture {
 		'description' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'category_id' => array('type' => 'integer', 'null' => false, 'default' => null),
 		'price' => array('type' => 'float', 'null' => false, 'default' => null, 'length' => '10,2'),
+		'quantity_left' => array('type' => 'integer', 'null' => false, 'default' => '0'),
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'indexes' => array(
@@ -31,13 +32,44 @@ class ProductFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => 1,
-			'name' => 'Lorem ipsum dolor sit amet',
-			'description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-			'category_id' => 1,
-			'price' => 1,
-			'created' => '2012-08-30 10:58:56',
-			'modified' => '2012-08-30 10:58:56'
+			'id' => '1',
+			'name' => 'CakePHP',
+			'description' => 'The best framework out there',
+			'category_id' => '1',
+			'price' => '0.00',
+			'quantity_left' => '0',
+			'created' => '2012-08-30 14:16:20',
+			'modified' => '2012-08-30 14:16:20'
+		),
+		array(
+			'id' => '2',
+			'name' => 'Product 1',
+			'description' => 'Foo',
+			'category_id' => '1',
+			'price' => '10.00',
+			'quantity_left' => '30',
+			'created' => '2012-08-30 15:26:23',
+			'modified' => '2012-08-30 15:26:23'
+		),
+		array(
+			'id' => '3',
+			'name' => 'Product 2',
+			'description' => 'Bar',
+			'category_id' => '1',
+			'price' => '28.00',
+			'quantity_left' => '41',
+			'created' => '2012-08-30 15:26:36',
+			'modified' => '2012-08-30 15:26:36'
+		),
+		array(
+			'id' => '4',
+			'name' => 'Product 3',
+			'description' => 'Baz',
+			'category_id' => '1',
+			'price' => '27.00',
+			'quantity_left' => '0',
+			'created' => '2012-08-30 15:26:56',
+			'modified' => '2012-08-30 15:26:56'
 		),
 	);
 
