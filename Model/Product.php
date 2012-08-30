@@ -98,5 +98,40 @@ class Product extends AppModel {
 		)
 	);
 
+	public $findMethods = array(
+		'inStock' => true,
+		'outOfStock' => true,
+		'recent' => true
+	);
+
+	protected function _findInStock($state, $query, $results = array()) {
+		if ($state === 'before') {
+			$query['conditions']['Product.quantity_left >'] = 0;
+			$query['contain']['Category'] = array('fields' => array('id', 'name'));
+			return $query;
+		}
+
+		return $results;
+	}
+	
+	protected function _findOutOfStock($state, $query, $results = array()) {
+		if ($state === 'before') {
+			$query['conditions']['Product.quantity_left <='] = 0;
+			$query['contain']['Category'] = array('fields' => array('id', 'name'));
+			return $query;
+		}
+
+		return $results;
+	}
+
+	protected function _findRecent($state, $query, $results = array()) {
+		if ($state === 'before') {
+			$query['order']['Product.created'] = 'desc';
+			$query['contain']['Category'] = array('fields' => array('id', 'name'));
+			return $query;
+		}
+
+		return $results;
+	}
 }
 

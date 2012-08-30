@@ -8,6 +8,7 @@
 		echo $this->Form->input('description');
 		echo $this->Form->input('category_id');
 		echo $this->Form->input('price');
+		echo $this->Form->input('quantity_left');
 		echo $this->Form->input('Order');
 		echo $this->Form->input('Image');
 	?>

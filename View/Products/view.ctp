@@ -26,6 +26,11 @@
 			<?php echo h($product['Product']['price']); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('Quantity Left'); ?></dt>
+		<dd>
+			<?php echo h($product['Product']['quantity_left']); ?>
+			&nbsp;
+		</dd>
 		<dt><?php echo __('Created'); ?></dt>
 		<dd>
 			<?php echo h($product['Product']['created']); ?>

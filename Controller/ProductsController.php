@@ -7,14 +7,29 @@ App::uses('AppController', 'Controller');
  */
 class ProductsController extends AppController {
 
+	public $components = array(
+		'Paginator'
+	);
+
 /**
  * index method
  *
  * @return void
  */
 	public function index() {
+		$this->Paginator->settings[0] = 'recent';
 		$this->set('products', $this->paginate());
 		$this->set('_serialize', 'products');
+	}
+
+	public function in_stock() {
+		$this->Paginator->settings[0] = 'inStock';
+		$this->setAction('index');
+	}
+
+	public function out_of_stock() {
+		$this->Paginator->settings[0] = 'outOfStock';
+		$this->setAction('index');
 	}
 
 /**

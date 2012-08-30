@@ -57,6 +57,7 @@ class WorkshopSchema extends CakeSchema {
 		'description' => array('type' => 'text', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'category_id' => array('type' => 'integer', 'null' => false, 'default' => null),
 		'price' => array('type' => 'float', 'null' => false, 'default' => null, 'length' => '10,2'),
+		'quantity_left' => array('type' => 'integer', 'null' => false, 'default' => 0),
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'indexes' => array(
