@@ -141,5 +141,11 @@ class Product extends AppModel {
 
 		return $results;
 	}
+
+	public function isOwner($user, $id) {
+		return (bool)$this->find('first', array(
+			'conditions' => array('owner_id' => $user, 'id' => $id)
+		));
+	}
 }
 

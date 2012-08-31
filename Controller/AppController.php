@@ -45,7 +45,8 @@ class AppController extends Controller {
 				'Api'
 			),
 			'authorize' => array(
-				'Controller'
+				'Workshop',
+				'Controller',
 			)
 		),
 		'DebugKit.Toolbar'
@@ -84,7 +85,7 @@ class AppController extends Controller {
 	}
 
 	public function isAuthorized($request) {
-		return true;
+		return $this->Auth->user('role') === 'admin';
 	}
 
 }

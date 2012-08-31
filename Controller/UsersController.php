@@ -10,7 +10,7 @@ class UsersController extends AppController {
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('add');
+		$this->Auth->allow('add', 'reset_password', 'reset');
 	}
 
 /**
@@ -111,7 +111,10 @@ class UsersController extends AppController {
 			if ($this->Auth->login()) {
 				return $this->redirect(array('controller' => 'products', 'action' => 'index'));
 			}
-			$this->Session->setFlash('Invalid credentials', 'error');
+			$this->redirect(array(
+				'action' => 'reset_password',
+				'?' => array('e' => $this->request->data('User.email'))
+			));
 		}
 	}
 
@@ -119,4 +122,37 @@ class UsersController extends AppController {
 		$this->redirect($this->Auth->logout());
 	}
 
+	public function reset_password() {
+		if ($this->request->is('post')) {
+			if ($this->User->passwordRecovery($this->request->data)) {
+				return $this->render('email_sent');
+			} else {
+				$this->Session->setFlash('You are not registered');
+				$this->redirect(array('action' => 'add'));
+			}
+		}
+		if (!empty($this->request->query['e'])) {
+			$this->request->data('User.email', $this->request->query['e']);
+		}
+		$this->render('recover_password');
+	}
+
+	public function reset($token = null) {
+		if ($this->request->is('put')) {
+			if ($this->User->reset($token, $this->request->data)) {
+				$this->Session->setFlash('Now you need to login :)');
+				$this->redirect(array('action' => 'login'));
+			}
+		}
+
+		if (!$user = $this->User->getUserByRecoveryToken($token)) {
+			$this->Session->setFlash('Invalid token', 'error');
+			$this->redirect(array('action' => 'login'));
+		}
+
+		if ($this->request->is('get')) {
+			$this->request->data = $user;
+			unset($this->request->data['User']['password']);
+		}
+	}
 }

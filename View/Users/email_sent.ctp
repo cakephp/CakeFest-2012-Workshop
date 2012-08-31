@@ -1,0 +1,1 @@
+<h1>A recovery email was sent to you</h1>

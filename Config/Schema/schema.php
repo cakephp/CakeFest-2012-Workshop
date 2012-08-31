@@ -81,6 +81,7 @@ class WorkshopSchema extends CakeSchema {
 		'password' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 128, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'role' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 15, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'token' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 40),
+		'recovery_token' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 40),
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'modified' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'indexes' => array(
