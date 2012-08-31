@@ -41,6 +41,13 @@ class Order extends AppModel {
 		)
 	);
 
+	public $hasMany = array(
+		'OrdersProduct' => array(
+			'class' => 'OrdersProduct',
+			'foreignKey' => 'order_id'
+		)
+	);
+
 /**
  * hasAndBelongsToMany associations
  *
@@ -60,9 +67,50 @@ class Order extends AppModel {
 			'offset' => '',
 			'finderQuery' => '',
 			'deleteQuery' => '',
-			'insertQuery' => ''
+			'insertQuery' => '',
+			'with' => 'OrdersProduct'
 		)
 	);
 
+	public $findMethods = array('having' => true);
+
+	public function createOrder($data) {
+		if (!empty($data['OrdersProduct'])) {
+			$products = $data['OrdersProduct']['product_id'];
+			$prices = $this->Product->find('list', array(
+				'fields' => array('id', 'price'),
+				'conditions' => array('id' => $products)
+			));
+
+			unset($data['OrdersProduct']);
+			foreach ($products as $p) {
+				$data['OrdersProduct'][] = array(
+					'product_id' => $p,
+					'price' => $prices[$p]
+				);
+			}
+		}
+
+		$validator = $this->OrdersProduct->validator();
+		unset($validator['order_id']);
+		return $this->saveAll($data);
+	}
+
+	protected function _findHaving($state, $query, $results = array()) {
+		if ($state === 'before') {
+			$this->bindModel(array('hasOne' => array(
+				'OrdersProduct' => array(
+					'className' => 'OrdersProduct',
+					'foreignKey' => 'order_id',
+					'type' => 'inner',
+					'conditions' => array('product_id' => $query['product'])
+				)
+			)), true);
+			$query['contain'] = array('User', 'OrdersProduct');
+			return $query;
+		}
+
+		return $results;
+	}
 }
 

@@ -7,6 +7,12 @@ App::uses('AppController', 'Controller');
  */
 class OrdersController extends AppController {
 
+	public $components = array(
+		'Paginator' => array('settings' => array(
+			'contain' => array('User')
+		))
+	);
+
 /**
  * index method
  *
@@ -16,6 +22,13 @@ class OrdersController extends AppController {
 		$this->set('orders', $this->paginate());
 		$this->set('_serialize', 'orders');
 	}
+
+	public function having($product) {
+		$this->Paginator->settings[0] = 'having';
+		$this->Paginator->settings['product'] = $product;
+		$this->setAction('index');
+	}
+
 
 /**
  * view method
@@ -41,7 +54,8 @@ class OrdersController extends AppController {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Order->create();
-			if ($this->Order->save($this->request->data)) {
+			$this->request->data('Order.user_id', $this->Auth->user('id'));
+			if ($this->Order->createOrder($this->request->data)) {
 				return $this->_success('order');
 			} else {
 				$ex = new ValidationException('Please correct your errors');
@@ -49,9 +63,8 @@ class OrdersController extends AppController {
 				throw $ex;
 			}
 		}
-		$users = $this->Order->User->find('list');
 		$products = $this->Order->Product->find('list');
-		$this->set(compact('users', 'products'));
+		$this->set(compact('products'));
 	}
 
 /**

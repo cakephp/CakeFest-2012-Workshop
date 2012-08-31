@@ -3,9 +3,10 @@
 	<fieldset>
 		<legend><?php echo __('Add Order'); ?></legend>
 	<?php
-		echo $this->Form->input('user_id');
-		echo $this->Form->input('total');
-		echo $this->Form->input('Product');
+		echo $this->Form->input('OrdersProduct.product_id', array(
+			'multiple' => 'checkbox',
+			'options' => $products
+		));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
