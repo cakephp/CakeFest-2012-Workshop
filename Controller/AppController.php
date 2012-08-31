@@ -41,13 +41,16 @@ class AppController extends Controller {
 			'authenticate' => array(
 				'Form' => array(
 					'fields' => array('username' => 'email')
-				)
+				),
+				'Api'
+			),
+			'authorize' => array(
+				'Controller'
 			)
 		),
 		'DebugKit.Toolbar'
 	);
-	
-	
+
 /**
  * Dispatches the controller action.  Checks that the action
  * exists and isn't private.
@@ -79,4 +82,9 @@ class AppController extends Controller {
 		$this->Session->setFlash(__('The %s has been %s', $model, $action));
 		$this->redirect(array('action' => 'index'));
 	}
+
+	public function isAuthorized($request) {
+		return true;
+	}
+
 }

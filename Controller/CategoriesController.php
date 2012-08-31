@@ -9,6 +9,13 @@ App::uses('ValidationException', 'Error');
  */
 class CategoriesController extends AppController {
 
+	public function isAuthorized($request) {
+		if ($this->Auth->user('role') !== 'admin') {
+			return false;
+		}
+		return parent::isAuthorized($request);
+	}
+
 /**
  * index method
  *

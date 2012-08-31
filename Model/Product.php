@@ -55,6 +55,13 @@ class Product extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'Owner' => array(
+			'className' => 'User',
+			'foreignKey' => 'owner_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 
