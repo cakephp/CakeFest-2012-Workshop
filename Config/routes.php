@@ -43,6 +43,7 @@ Router::connect('/categories/:id',
 
 Router::mapResources('Products');
 
+Router::connect('/register', array('controller' => 'users', 'action' => 'add'));
 /**
  * Here, we are connecting '/' (base path) to controller called 'Pages',
  * its action called 'display', and we pass a param to select the view file

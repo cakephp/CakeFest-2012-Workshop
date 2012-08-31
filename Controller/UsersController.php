@@ -6,6 +6,12 @@ App::uses('AppController', 'Controller');
  * @property User $User
  */
 class UsersController extends AppController {
+	
+	
+	public function beforeFilter() {
+		parent::beforeFilter();
+		$this->Auth->allow('add');
+	}
 
 /**
  * index method
@@ -41,7 +47,9 @@ class UsersController extends AppController {
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->User->create();
-			if ($this->User->save($this->request->data)) {
+			$list = array('email', 'password');
+			if ($this->User->save($this->request->data, true, $list)) {
+				$this->Auth->login();
 				return $this->_success('user');
 			} else {
 				$ex = new ValidationException('Please correct your errors');
@@ -97,4 +105,18 @@ class UsersController extends AppController {
 		}
 		throw new InternalServerError('Record was not deleted');
 	}
+
+	public function login() {
+		if ($this->request->is('post')) {
+			if ($this->Auth->login()) {
+				return $this->redirect(array('controller' => 'products', 'action' => 'index'));
+			}
+			$this->Session->setFlash('Invalid credentials', 'error');
+		}
+	}
+
+	public function logout() {
+		$this->redirect($this->Auth->logout());
+	}
+
 }

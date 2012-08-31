@@ -1,5 +1,7 @@
 <?php
 App::uses('AppModel', 'Model');
+App::uses('AuthComponent', 'Controller/Component');
+
 /**
  * User Model
  *
@@ -61,6 +63,23 @@ class User extends AppModel {
 			'counterQuery' => ''
 		)
 	);
+
+	public function beforeValidate($options = array()) {
+		if (empty($this->data[$this->alias]['role'])) {
+			$this->whitelist[] = 'role';
+			$this->data[$this->alias]['role'] = 'user';
+		}
+		$this->whitelist[] = 'token';
+		$this->data[$this->alias]['token'] = sha1(String::uuid());
+		return parent::beforeValidate($options);
+	}
+
+	public function beforeSave($options = array()) {
+		if (!empty($this->data[$this->alias]['password'])) {
+			$this->data[$this->alias]['password'] = AuthComponent::password($this->data[$this->alias]['password']);
+		}
+		return parent::beforeSave($options);
+	}
 
 }
 
