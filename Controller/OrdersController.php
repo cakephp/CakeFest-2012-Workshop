@@ -20,6 +20,8 @@ class OrdersController extends AppController {
  */
 	public function index() {
 		$this->set('orders', $this->paginate());
+		$products = $this->Order->Product->find('list');
+		$this->set(compact('products'));
 		$this->set('_serialize', 'orders');
 	}
 

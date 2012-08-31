@@ -1,3 +1,9 @@
 [submodule "Plugin/DebugKit"]
 	path = Plugin/DebugKit
 	url = git://github.com/cakephp/debug_kit.git
+[submodule "Plugin/AssetCompress"]
+	path = Plugin/AssetCompress
+	url = git://github.com/lorenzo/asset_compress.git
+[submodule "Plugin/TwitterBootstrap"]
+	path = Plugin/TwitterBootstrap
+	url = git://github.com/slywalker/TwitterBootstrap.git

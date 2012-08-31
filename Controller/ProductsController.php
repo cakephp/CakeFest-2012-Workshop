@@ -20,6 +20,9 @@ class ProductsController extends AppController {
 		$this->Paginator->settings[0] = 'recent';
 		$this->set('products', $this->paginate());
 		$this->set('_serialize', 'products');
+
+		$categories = $this->Product->Category->find('list');
+		$this->set(compact('categories'));
 	}
 
 	public function in_stock() {

@@ -1,4 +1,4 @@
-<div class="products form">
+<div class="products form span9">
 <?php echo $this->Form->create('Product'); ?>
 	<fieldset>
 		<legend><?php echo __('Add Product'); ?></legend>
@@ -14,7 +14,7 @@
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
-<div class="actions">
+<div class="actions span3">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 

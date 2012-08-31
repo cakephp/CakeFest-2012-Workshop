@@ -52,6 +52,15 @@ class AppController extends Controller {
 		'DebugKit.Toolbar'
 	);
 
+	public $helpers = array(
+		'Form' => array(
+			'className' => 'TwitterBootstrap.BootstrapForm'
+		),
+		'Paginator' => array(
+			'className' => 'TwitterBootstrap.BootstrapPaginator'
+		)
+	);
+
 /**
  * Dispatches the controller action.  Checks that the action
  * exists and isn't private.

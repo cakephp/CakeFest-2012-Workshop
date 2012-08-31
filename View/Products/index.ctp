@@ -1,6 +1,8 @@
-<div class="products index">
+<?php $this->extend('/Layouts/split'); ?>
+<?php $this->start('left'); ?>
+<div class="products index" id="products-list">
 	<h2><?php echo __('Products'); ?></h2>
-	<table cellpadding="0" cellspacing="0">
+	<table class="table">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
@@ -14,7 +16,7 @@
 	</tr>
 	<?php
 	foreach ($products as $product): ?>
-	<tr>
+	<tr data-id="<?php echo $product['Product']['id'] ?>">
 		<td><?php echo h($product['Product']['id']); ?>&nbsp;</td>
 		<td><?php echo h($product['Product']['name']); ?>&nbsp;</td>
 		<td><?php echo h($product['Product']['description']); ?>&nbsp;</td>
@@ -26,37 +28,108 @@
 		<td><?php echo h($product['Product']['created']); ?>&nbsp;</td>
 		<td><?php echo h($product['Product']['modified']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $product['Product']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $product['Product']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $product['Product']['id']), null, __('Are you sure you want to delete # %s?', $product['Product']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
 	</table>
-	<p>
+	<?php echo $this->Paginator->pagination(); ?>
+</div>
+<?php $this->end();?>
+<?php $this->start('right');?>
+<div class="products form span9">
+<?php echo $this->Form->create('Product', array('action' => 'add', 'id' => 'product-form')); ?>
+	<fieldset>
+		<legend><?php echo __('Add Product'); ?></legend>
 	<?php
-	echo $this->Paginator->counter(array(
-	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
-	));
-	?>	</p>
-
-	<div class="paging">
-	<?php
-		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
+		echo $this->Form->input('name', array('class' => 'name'));
+		echo $this->Form->input('description', array('class' => 'description'));
+		echo $this->Form->input('category_id', array('class' => 'category_id'));
+		echo $this->Form->input('price', array('class' => 'price'));
+		echo $this->Form->input('quantity_left', array('class' => 'quantity_left'));
 	?>
-	</div>
+	</fieldset>
+<?php echo $this->Form->end(__('Submit')); ?>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Product'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Categories'), array('controller' => 'categories', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Category'), array('controller' => 'categories', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Orders'), array('controller' => 'orders', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Order'), array('controller' => 'orders', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Images'), array('controller' => 'images', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Image'), array('controller' => 'images', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
+<?php $this->end();?>
+
+<?php $this->start('script') ?>
+<script>
+	App.Model.Product = App.Model.extend({
+		name: 'Product',
+		urlRoot: '/products'
+	});
+
+	App.IndexView = Backbone.View.extend({
+		el: '#products-list',
+		events: {
+			'click tbody tr': 'load',
+			'hover tbody tr': 'highlight'
+		},
+
+		initialize: function() {
+			model = new App.Model.Product();
+			var editView = new App.EditView({model: model});
+		},
+
+		load: function(e) {
+			var id = $(e.currentTarget).data('id');
+			var model = new App.Model.Product({id: id});
+			var editView = new App.EditView({model: model});
+			Backbone.ModelBinding.bind(editView, {all: 'class'});
+			model.fetch();
+		},
+		
+		highlight: function(e) {
+			$(e.currentTarget).css('cursor', 'pointer');
+		}
+	});
+ 
+	App.EditView = Backbone.View.extend({
+		el: '#product-form',
+		model: null,
+
+		events: {
+			'submit': 'save'
+		},
+		
+		save: function(e) {
+			e.preventDefault();
+			var self = this;
+			this.model.save()
+				.success(function(){
+					window.location.reload();
+				})
+				.error(function(response) {
+					var errors = JSON.parse(response.responseText);
+					if ('errors' in errors) {
+						self.showErrors(errors.errors);
+					}
+				});
+		},
+
+		showErrors: function(errors) {
+			for (field in errors) {
+				var m = new App.ValidationError({
+					message: errors[field].pop()
+				});
+				this.$('.' + field).parent().append(m.el)
+					.closest('.control-group').addClass('error');
+			}
+		}
+	});
+
+	App.ValidationError = Backbone.View.extend({
+		tagName: 'span',
+		className: 'help-inline',
+
+		initialize: function() {
+			this.$el.html(this.options.message);
+		}
+	});
+
+	var list = new App.IndexView();
+</script>
+<?php $this->end();?>
+
+

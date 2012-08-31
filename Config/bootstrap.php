@@ -71,7 +71,8 @@ Cache::config('default', array('engine' => 'File'));
  *
  */
  
- CakePlugin::load('DebugKit');
+CakePlugin::load('DebugKit');
+CakePlugin::load('TwitterBootstrap');
 
 /**
  * You can attach event listeners to the request lifecyle as Dispatcher Filter . By Default CakePHP bundles two filters:
@@ -118,8 +119,4 @@ CakeEventManager::instance()->attach(function($event) {
 	);
 }, 'Order.beforeCreate');
 
-CakeEventManager::instance()->attach(function($event) {
-	if ($event->data['data']['OrdersProduct'][0]['product_id'] == 1) {
-		return false;
-	}
-}, 'Order.beforeCreate');
+CakePlugin::load('AssetCompress', array('bootstrap' => true));
