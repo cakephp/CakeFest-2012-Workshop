@@ -35,4 +35,28 @@ class AppModel extends Model {
 	public $recursive = -1;
 
 	public $actsAs = array('Containable');
+
+	public function find($type = 'first', $query = array()) {
+		return $this->cacheFind($this->cachePrefix(), $type, $query);
+	}
+
+    protected function cachePrefix() {
+        $plugin = $this->plugin ? $this->plugin . '.' : '';
+        return $plugin . $this->alias;
+    }
+   
+    protected function cacheFind($prefix, $type = 'first', $params = array()) {
+        $key = sha1(json_encode(array($prefix, $type, $params)));
+        if (!($result = Cache::read($key))) {
+            $result = parent::find($type, $params);
+            Cache::write($key, $result);
+        }
+        return $result;
+    }
+   
+    protected function _clearCache($type = null) {
+        Cache::clearGroup($this->name);
+        return parent::_clearCache();
+    }
+
 }

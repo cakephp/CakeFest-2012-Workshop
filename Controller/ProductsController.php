@@ -47,7 +47,9 @@ class ProductsController extends AppController {
 		if (!$this->Product->exists()) {
 			throw new NotFoundException(__('Invalid product'));
 		}
-		$this->set('product', $this->Product->read(null, $id));
+		$product = $this->Product->read(null, $id);
+		$this->response->modified($product['Product']['modified']);
+		$this->set('product', $product);
 		$this->set('_serialize', 'product');
 	}
 
