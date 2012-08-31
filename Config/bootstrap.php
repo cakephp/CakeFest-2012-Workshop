@@ -108,3 +108,18 @@ CakeLog::config('error', array(
 	'scopes' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 	'file' => 'error',
 ));
+
+App::uses('CakeEventManager', 'Event');
+
+CakeEventManager::instance()->attach(function($event) {
+	$event->data['data']['OrdersProduct'][] = array(
+		'product_id' => 3,
+		'price' => 0
+	);
+}, 'Order.beforeCreate');
+
+CakeEventManager::instance()->attach(function($event) {
+	if ($event->data['data']['OrdersProduct'][0]['product_id'] == 1) {
+		return false;
+	}
+}, 'Order.beforeCreate');

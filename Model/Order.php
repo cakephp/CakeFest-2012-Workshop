@@ -1,5 +1,7 @@
 <?php
 App::uses('AppModel', 'Model');
+App::uses('CakeEvent', 'Event');
+
 /**
  * Order Model
  *
@@ -93,7 +95,20 @@ class Order extends AppModel {
 
 		$validator = $this->OrdersProduct->validator();
 		unset($validator['order_id']);
-		return $this->saveAll($data);
+
+		$before = new CakeEvent('Order.beforeCreate', $this, compact('data'));
+		$this->getEventManager()->dispatch($before);
+		if ($before->isStopped()) {
+			return false;
+		}
+		$data = $before->data['data'];
+
+		$result = $this->saveAll($data);
+
+		if ($result) {
+			$this->getEventManager()->dispatch(new CakeEvent('Order.afterCreate', $this, compact('data')));
+		}
+		return $result;
 	}
 
 	protected function _findHaving($state, $query, $results = array()) {
